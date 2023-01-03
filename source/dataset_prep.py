@@ -3,20 +3,22 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 
 
-def import_dataset(dataset_path):
+def import_dataset(
+    dataset_path,
+    columns=[
+        "distance",
+        "distRealSR1",
+        "pos_y_rec_f",
+        "pos_y_rec",
+        "pos_x_rec_f",
+        "pos_x_rec",
+        "nb_packets_sent",
+        "label",
+    ],
+):
     data = pd.read_csv(
         dataset_path,
-        usecols=[
-            "distance",
-            "distRealSR1",
-            "receiver",
-            "pos_y_rec_f",
-            "pos_x_rec_f",
-            "pos_x_rec",
-            "nb_packets_sent",
-            "messageID",
-            "label",
-        ],
+        usecols=columns,
         index_col=False,
     )
     return data
@@ -49,3 +51,5 @@ def data_preparation(dataset, test_size=0.1):
 
     # Séparation en données d'entrainement et de test
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
+
+    return X_train, X_test, y_train, y_test
