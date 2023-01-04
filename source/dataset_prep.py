@@ -50,6 +50,6 @@ def data_preparation(dataset, test_size=0.1):
             y[i] = 1
 
     # Séparation en données d'entrainement et de test
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size)
 
     return X_train, X_test, y_train, y_test
