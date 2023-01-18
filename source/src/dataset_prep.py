@@ -16,24 +16,23 @@ def import_dataset(
         "label",
     ],
 ):
+    # Import du csv
     data = pd.read_csv(
         dataset_path,
         usecols=columns,
         index_col=False,
     )
-    return data
 
-
-def clean_dataset(dataset):
-    print("Nombre de lignes avant nettoyage : ", dataset.shape[0])
+    print("Nombre de lignes avant nettoyage : ", data.shape[0])
 
     # On remplace les données infinies par nan si elles existent
-    dataset.replace([np.inf, -np.inf], np.nan, inplace=True)
+    data.replace([np.inf, -np.inf], np.nan, inplace=True)
 
     # Drop les lignes avec nan
+    data.dropna(inplace=True)
+    print("Nombre de lignes après nettoyage : ", data.shape[0])
 
-    dataset.dropna(inplace=True)
-    print("Nombre de lignes après nettoyage : ", dataset.shape[0])
+    return data
 
 
 def sample_dataset(dataset, sample_nb):
