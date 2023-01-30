@@ -46,7 +46,7 @@ def data_preparation(dataset, test_size=0.1):
 
     # TODO :  rajouter la ligne qui change tout ce qui n'est pas un 0 en 1
     for i in range(len(y)):
-        if y[i] == 13:
+        if y[i] != 0:
             y[i] = 1
 
     # Séparation en données d'entrainement et de test
