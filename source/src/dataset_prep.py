@@ -15,12 +15,16 @@ def import_dataset(
         "nb_packets_sent",
         "label",
     ],
+    data_type={
+        "label":"int8"
+    }
 ):
     # Import du csv
     data = pd.read_csv(
         dataset_path,
         usecols=columns,
         index_col=False,
+        dtype=data_type
     )
 
     print("Nombre de lignes avant nettoyage : ", data.shape[0])
