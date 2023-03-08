@@ -86,7 +86,7 @@ def flat_sequence_creation(df):
             end += slide
             length -= 10
         
-        print('Nombre de séquences : ',len(senders_sequences))
+    print('Nombre de séquences : ',len(senders_sequences))
     return senders_sequences, senders_label
 
 def data_preparation(df, sample=False, test_size=0.1):

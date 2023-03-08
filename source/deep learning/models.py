@@ -18,7 +18,7 @@ def dense_network(input_sequence_shape):
     )
     return simple_model
 
-def stacked_RNN(hidden_units=32, dense_units=1, input_sequence_shape=input_sequence_shape, activation=['relu', 'relu']):
+def stacked_RNN(hidden_units=32, dense_units=1, input_shape=(20,13), activation=['relu', 'relu']):
     '''
     hidden_units : nombre de neurones dans la couche SimpleRNN
     dense_units : nombre de neurones dans la couche Dense
@@ -26,7 +26,7 @@ def stacked_RNN(hidden_units=32, dense_units=1, input_sequence_shape=input_seque
     '''
     
     model = Sequential()
-    model.add(SimpleRNN(hidden_units, input_shape=(20,input_sequence_shape), return_sequences=True, activation=activation[0]))
+    model.add(SimpleRNN(hidden_units, input_shape=input_shape, return_sequences=True, activation=activation[0]))
     model.add(SimpleRNN(32, activation=activation[0]))
     model.add(keras.layers.BatchNormalization())
     model.add(Dense(64, activation=activation[1]))
