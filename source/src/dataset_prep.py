@@ -110,3 +110,77 @@ def data_preparation(df, sample=False, test_size=0.1):
     print("y_test : ", y_test.shape)
     
     return X_train, X_test, y_train, y_test
+
+# autre essaie de préparation de donnée pour collé avec la littérature 
+
+def get_normal(df):
+    df_normal = df[df['label']==0]
+    #print(df_normal)
+    df_normal.drop(['label'], axis=1)
+    return df_normal
+
+def flat_sequence_creation_cnnlstm(df):
+    senders_sequences = []
+    senders_pos_f=[]
+    senders = np.unique(df["sender"].values)
+    for sender in senders:
+        # Données d'un seul sender rangée en fonction de l'heure d'envoi
+        sender_data_sorted = df.loc[df['sender'] == sender].sort_values("sendTime")
+
+        #On supprime les colonnes  sender
+        sender_data_sorted = sender_data_sorted.drop(["sender"], axis=1)
+
+        #sequence_array = []
+
+        length = sender_data_sorted.shape[0]
+        slide = 10
+        start = 0
+        end = 20
+
+        # On vérifie qu'il est possible de faire une séquence de taille 20
+        while length > 20:
+            # Extraction par tranche de 20 avec une inter de 10
+            sequence = sender_data_sorted[start:end]
+
+            # recupère la position finale
+            senders_final_position = sequence.loc[:, ["pos_x_send_f", "pos_y_send_f"]]
+            #print(senders_final_position)
+
+            #supprimer la position final dans les sequences
+            sequence = sequence.drop(["pos_x_send_f", "pos_y_send_f"], axis=1)
+
+            # Attribution des tableaux numpy
+            senders_sequences.append(np.array(sequence.values.tolist(), dtype=np.float32))
+            senders_pos_f.append(np.array(senders_final_position.values.tolist(), dtype=np.float32))
+
+            # Mise à jour des variables
+            start += slide
+            end += slide
+            length -= 10
+        
+    print('Nombre de séquences : ',len(senders_sequences))
+    return senders_sequences, senders_pos_f
+
+def data_preparation_cnnlstm(df, sample=False, test_size=0.1):
+    df=get_normal(df)
+
+    sorted_dataset = df.sort_values("sender")
+    sequence_test, pos_f_test = flat_sequence_creation_cnnlstm(sorted_dataset)
+
+    # Transformation en array numpy
+    X = np.array(sequence_test)
+    y = np.array(pos_f_test, dtype=np.float32)
+
+    # Réduire le temps de training en prenant les 100000 premiers éléments
+    if sample:
+        X = X[:100000]
+        y = y[:100000]
+    # Séparation en données d'entrainement et de test
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size)
+    print("X_train : ", X_train.shape)
+    print("y_train : ", y_train.shape)
+    print("X_test : ", X_test.shape)
+    print("y_test : ", y_test.shape)
+    
+    return X_train, X_test, y_train, y_test
+
