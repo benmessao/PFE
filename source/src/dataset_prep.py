@@ -184,3 +184,71 @@ def data_preparation_cnnlstm(df, sample=False, test_size=0.1):
     
     return X_train, X_test, y_train, y_test
 
+# data préparation pour la prédiction multiclasse 
+# Sequences pour multiclasses
+def flat_sequence_creation_multiclasse(df):
+    labels = [0, 13, 14, 15, 18, 19]
+    label_encoding = [[1,0,0,0,0,0],
+                    [0,1,0,0,0,0],
+                    [0,0,1,0,0,0],
+                    [0,0,0,1,0,0],
+                    [0,0,0,0,1,0],
+                    [0,0,0,0,0,1]]
+    senders_sequences = []
+    senders_label = []
+    for idx, label in enumerate(labels):
+        # Dataframe ne contenant seulement le label étudié
+        df_label_sorted = df.loc[df['label'] == label]
+
+        # Rangement par sender
+        senders = np.unique(df_label_sorted["sender"].values)
+
+        for sender in senders:
+            # Iteration sur chaque sender
+            sender_data_sorted = df_label_sorted.loc[df_label_sorted['sender'] == sender].sort_values("sendTime")
+
+            #On supprime les colonnes label et sender
+            sender_data_sorted = sender_data_sorted.drop(["label","sender","sendTime"], axis=1)
+
+            length = sender_data_sorted.shape[0]
+            slide = 10
+            start = 0
+            end = 20
+
+            # On vérifie qu'il est possible de faire une séquence de taille 20
+            while length > 20:
+                # Extraction par tranche de 20 avec une inter de 10
+                sequence = sender_data_sorted[start:end]
+
+                # Attribution des tableaux numpy
+                senders_sequences.append(np.array(sequence.values.tolist(), dtype=np.float32))
+                senders_label.append(label_encoding[idx])
+
+                # Mise à jour des variables
+                start += slide
+                end += slide
+                length -= 10
+    print('Nombre de séquences : ',len(senders_sequences))
+    return senders_sequences, senders_label
+
+def data_preparation_multiclasse(df, sample=False, test_size=0.1):
+   
+    sorted_dataset = df.sort_values("sender")
+    sequence_test, label_test = flat_sequence_creation_multiclasse(sorted_dataset)
+
+    # Transformation en array numpy
+    X = np.array(sequence_test)
+    y = np.array(label_test, dtype=np.float32)
+
+    # Réduire le temps de training en prenant les 100000 premiers éléments
+    if sample:
+        X = X[:100000]
+        y = y[:100000]
+    # Séparation en données d'entrainement et de test
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size)
+    print("X_train : ", X_train.shape)
+    print("y_train : ", y_train.shape)
+    print("X_test : ", X_test.shape)
+    print("y_test : ", y_test.shape)
+    
+    return X_train, X_test, y_train, y_test

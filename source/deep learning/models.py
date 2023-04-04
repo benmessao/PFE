@@ -9,7 +9,7 @@ from keras import layers, applications, utils, models, optimizers, Input, callba
 from keras.models import Sequential
 from keras.layers import Dense, SimpleRNN
 
-
+# 3-dense layers
 def dense_network(input_sequence_shape):
     simple_model = keras.Sequential(
         [
@@ -25,8 +25,8 @@ def dense_network(input_sequence_shape):
     )
     return simple_model
 
-
-def stacked_RNN(
+# 2-stacked RNN model
+def stacked_RNN_small(
     hidden_units=32, dense_units=1, input_shape=(20, 13), activation=["relu", "relu"]
 ):
     """
@@ -51,7 +51,7 @@ def stacked_RNN(
 
     return model
 
-
+# 2-stacked LSTM
 def stacked_LSTM_small(input_sequence_shape):
     lstm_model = keras.Sequential(
         [
@@ -67,6 +67,8 @@ def stacked_LSTM_small(input_sequence_shape):
 
 
 # Mix
+# simple LSTM
+# 2-stacked RNN
 def mix_rnn_lstm(input_sequence_shape):
     lstm_rnn_model = keras.Sequential(
         [
