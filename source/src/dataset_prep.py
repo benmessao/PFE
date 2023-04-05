@@ -13,6 +13,7 @@ def import_dataset(
         "pos_x_rec_f",
         "pos_x_rec",
         "nb_packets_sent",
+        "sendTime",
         "label",
     ],
     data_type={
@@ -57,7 +58,7 @@ def flat_sequence_creation(df):
         else :
             label = sender_data_sorted['label'].tolist()[0]
         #On supprime les colonnes label et sender
-        sender_data_sorted = sender_data_sorted.drop(["label","sender"], axis=1)
+        sender_data_sorted = sender_data_sorted.drop(["label","sender","sendTime"], axis=1)
         
         #sequence_array = []
 
