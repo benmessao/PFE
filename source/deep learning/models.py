@@ -13,9 +13,7 @@ from keras.layers import Dense, SimpleRNN
 def dense_network(input_sequence_shape):
     simple_model = keras.Sequential(
         [
-            layers.Dense(
-                128, input_shape=(20, input_sequence_shape), activation="relu"
-            ),
+            layers.Dense(128, input_shape=(20, input_sequence_shape), activation="relu"),
             # layers.BatchNormalization(), # les batchNormalization fond baisser l'accuracy
             layers.Dense(256, activation="relu"),
             # layers.BatchNormalization(),
@@ -36,14 +34,7 @@ def stacked_RNN_small(
     """
 
     model = Sequential()
-    model.add(
-        SimpleRNN(
-            hidden_units,
-            input_shape=input_shape,
-            return_sequences=True,
-            activation=activation[0],
-        )
-    )
+    model.add(SimpleRNN(hidden_units,input_shape=input_shape,return_sequences=True,activation=activation[0],))
     model.add(SimpleRNN(32, activation=activation[0]))
     model.add(keras.layers.BatchNormalization())
     model.add(Dense(64, activation=activation[1]))
@@ -73,9 +64,7 @@ def mix_rnn_lstm(input_sequence_shape):
     lstm_rnn_model = keras.Sequential(
         [
             layers.Dense(32, input_shape=(20, input_sequence_shape), activation="relu"),
-            layers.LSTM(
-                128, return_sequences=True, activation="relu"
-            ),  # return_sequences à True pour que la sortie soit de dimension 3
+            layers.LSTM(128, return_sequences=True, activation="relu"),  # return_sequences à True pour que la sortie soit de dimension 3
             layers.BatchNormalization(),
             layers.Dense(64, activation="relu"),
             layers.SimpleRNN(64, activation="relu", return_sequences=True),
@@ -92,11 +81,7 @@ def mix_rnn_lstm(input_sequence_shape):
 # Single GRU layer of 256 units
 def simple_GRU(input_sequence_shape):
     simple_GRU = keras.models.Sequential()
-    simple_GRU.add(
-        keras.layers.Dense(
-            32, input_shape=(20, input_sequence_shape), activation="relu"
-        )
-    )
+    simple_GRU.add(keras.layers.Dense(32, input_shape=(20, input_sequence_shape), activation="relu"))
     simple_GRU.add(keras.layers.Dropout(0.2))
     simple_GRU.add(keras.layers.BatchNormalization())
     simple_GRU.add(keras.layers.GRU(256, return_sequences=False, activation="relu"))
@@ -111,22 +96,12 @@ def simple_GRU(input_sequence_shape):
 # 3-stacked GRU model
 def stacked_GRU(input_sequence_shape):
     stacked_GRU_model = keras.models.Sequential()
-    stacked_GRU_model.add(
-        keras.layers.Dense(
-            32, input_shape=(20, input_sequence_shape), activation="relu"
-        )
-    )
+    stacked_GRU_model.add(keras.layers.Dense(32, input_shape=(20, input_sequence_shape), activation="relu"))
     stacked_GRU_model.add(keras.layers.Dropout(0.2))
     stacked_GRU_model.add(keras.layers.BatchNormalization())
-    stacked_GRU_model.add(
-        keras.layers.GRU(256, return_sequences=True, activation="relu")
-    )
-    stacked_GRU_model.add(
-        keras.layers.GRU(256, return_sequences=True, activation="relu")
-    )
-    stacked_GRU_model.add(
-        keras.layers.GRU(256, return_sequences=False, activation="relu")
-    )
+    stacked_GRU_model.add(keras.layers.GRU(256, return_sequences=True, activation="relu"))
+    stacked_GRU_model.add(keras.layers.GRU(256, return_sequences=True, activation="relu"))
+    stacked_GRU_model.add(keras.layers.GRU(256, return_sequences=False, activation="relu"))
     stacked_GRU_model.add(keras.layers.Dropout(0.2))
     stacked_GRU_model.add(keras.layers.BatchNormalization())
     # stacked_GRU_model.add( keras.layers.Dense(64, activation='relu') )
@@ -138,22 +113,12 @@ def stacked_GRU(input_sequence_shape):
 # 3-stacked LSTM model
 def stacked_LSTM(input_sequence_shape):
     stacked_LSTM_model = keras.models.Sequential()
-    stacked_LSTM_model.add(
-        keras.layers.Dense(
-            32, input_shape=(20, input_sequence_shape), activation="relu"
-        )
-    )
+    stacked_LSTM_model.add(keras.layers.Dense(32, input_shape=(20, input_sequence_shape), activation="relu"))
     stacked_LSTM_model.add(keras.layers.Dropout(0.2))
     stacked_LSTM_model.add(keras.layers.BatchNormalization())
-    stacked_LSTM_model.add(
-        keras.layers.LSTM(256, return_sequences=True, activation="relu")
-    )
-    stacked_LSTM_model.add(
-        keras.layers.LSTM(256, return_sequences=True, activation="relu")
-    )
-    stacked_LSTM_model.add(
-        keras.layers.LSTM(256, return_sequences=False, activation="relu")
-    )
+    stacked_LSTM_model.add(keras.layers.LSTM(256, return_sequences=True, activation="relu"))
+    stacked_LSTM_model.add(keras.layers.LSTM(256, return_sequences=True, activation="relu"))
+    stacked_LSTM_model.add(keras.layers.LSTM(256, return_sequences=False, activation="relu"))
     stacked_LSTM_model.add(keras.layers.Dropout(0.2))
     stacked_LSTM_model.add(keras.layers.BatchNormalization())
     # stacked_LSTM_model.add( keras.layers.Dense(64, activation='relu') )
@@ -165,22 +130,12 @@ def stacked_LSTM(input_sequence_shape):
 # 3-stacked RNN model
 def stacked_RNN(input_sequence_shape):
     stacked_RNN_model = keras.models.Sequential()
-    stacked_RNN_model.add(
-        keras.layers.Dense(
-            32, input_shape=(20, input_sequence_shape), activation="relu"
-        )
-    )
+    stacked_RNN_model.add(keras.layers.Dense(32, input_shape=(20, input_sequence_shape), activation="relu"))
     stacked_RNN_model.add(keras.layers.Dropout(0.2))
     stacked_RNN_model.add(keras.layers.BatchNormalization())
-    stacked_RNN_model.add(
-        keras.layers.SimpleRNN(256, return_sequences=True, activation="relu")
-    )
-    stacked_RNN_model.add(
-        keras.layers.SimpleRNN(256, return_sequences=True, activation="relu")
-    )
-    stacked_RNN_model.add(
-        keras.layers.SimpleRNN(256, return_sequences=False, activation="relu")
-    )
+    stacked_RNN_model.add(keras.layers.SimpleRNN(256, return_sequences=True, activation="relu"))
+    stacked_RNN_model.add(keras.layers.SimpleRNN(256, return_sequences=True, activation="relu"))
+    stacked_RNN_model.add(keras.layers.SimpleRNN(256, return_sequences=False, activation="relu"))
     stacked_RNN_model.add(keras.layers.Dropout(0.2))
     stacked_RNN_model.add(keras.layers.BatchNormalization())
     # stacked_RNN_model.add( keras.layers.Dense(64, activation='relu') )
